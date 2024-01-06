@@ -29,6 +29,15 @@ jobs:
         python -m pip install --upgrade pip
         pip install pytest
         pip install -r requirements.txt
+        touch /home/runner/work/cicdbatchfifteen/cicdbatchfifteen/pranjal.txt
+    - name: Upload pranjal txt file
+      uses: actions/upload-artifact@v3
+      with:
+        name: pranjaltext
+        path: /home/runner/work/cicdbatchfifteen/cicdbatchfifteen/pranjal.txt
+      # Use always() to always run this step to publish test results when there are test failures
+      if: ${{ always() }}
+        
     - name: Test with pytest
       run: pytest --doctest-modules --junitxml=junit/test-results.xml
 
