@@ -33,3 +33,16 @@ jobs:
       continue-on-error: true
     - name: Mandatory step
       run: echo "Done"
+  build-and-push-docker-image-to-dockerhub:
+    runs-on: ubuntu-latest   
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        
+      - name: Build and Push docker image to docker Hub
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          repository: psrv3/cicdbatchfifteenga
+          tag_with_ref: true
