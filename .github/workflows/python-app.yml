@@ -58,6 +58,15 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
+      - name: Extract commit SHA
+        shell: bash
+        run: echo "##[set-output name=sha;]$(echo ${GITHUB_SHA::8})"
+        id: extract_sha
         
       - name: Build and Push docker image to docker Hub
         uses: docker/build-push-action@v1
@@ -65,7 +74,8 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
           repository: psrv3/cicdbatchfifteenga
-          tag_with_ref: true
+          tags: ${{ steps.extract_branch.outputs.branch }}-${{ steps.extract_sha.outputs.sha }}
+          # tag_with_ref: true
           
   build-and-push-docker-image-to-github-packages:
     runs-on: ubuntu-latest 
